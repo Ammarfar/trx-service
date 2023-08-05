@@ -4,7 +4,10 @@ import {
   PrimaryGeneratedColumn,
   CreateDateColumn,
   UpdateDateColumn,
+  ManyToOne,
 } from 'typeorm';
+import { User } from './user.entity';
+import { Product } from './product.entity';
 
 @Entity()
 export class Trx {
@@ -28,4 +31,10 @@ export class Trx {
 
   @UpdateDateColumn({ name: 'updatedAt' })
   updatedAt: Date;
+
+  @ManyToOne(() => User, (user) => user.id)
+  user?: User;
+
+  @ManyToOne(() => Product, (product) => product.id)
+  product?: Product;
 }

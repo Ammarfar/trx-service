@@ -30,6 +30,8 @@ export class TrxMapper {
     trxM.totalPrice = trx.totalPrice;
     trxM.createdAt = trx.createdAt;
     trxM.updatedAt = trx.updatedAt;
+    trxM.user = trx.user;
+    trxM.product = trx.product;
 
     return trxM;
   }

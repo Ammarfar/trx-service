@@ -1,3 +1,6 @@
+import { ProductM } from './product';
+import { UserM } from './user';
+
 export class TrxM {
   id: number;
   userId: number;
@@ -6,4 +9,6 @@ export class TrxM {
   totalPrice: number;
   createdAt: Date;
   updatedAt: Date;
+  user?: UserM;
+  product?: ProductM;
 }

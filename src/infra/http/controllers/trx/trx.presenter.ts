@@ -1,5 +1,7 @@
 import { ApiProperty } from '@nestjs/swagger';
+import { ProductM } from 'src/domain/model/product';
 import { TrxM } from 'src/domain/model/trx';
+import { UserM } from 'src/domain/model/user';
 
 export class TrxPresenter {
   @ApiProperty()
@@ -16,6 +18,10 @@ export class TrxPresenter {
   createdAt: Date;
   @ApiProperty()
   updatedAt: Date;
+  @ApiProperty()
+  user?: UserM;
+  @ApiProperty()
+  product?: ProductM;
 
   constructor(trx: TrxM) {
     this.id = trx.id;
@@ -25,5 +31,7 @@ export class TrxPresenter {
     this.totalPrice = trx.totalPrice;
     this.createdAt = trx.createdAt;
     this.updatedAt = trx.updatedAt;
+    this.user = trx.user;
+    this.product = trx.product;
   }
 }

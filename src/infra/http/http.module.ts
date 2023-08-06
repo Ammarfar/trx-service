@@ -2,10 +2,13 @@ import { Module } from '@nestjs/common';
 import { UseCasesProxyModule } from '../usecases-proxy/usecases.proxy.module';
 import { TrxController } from './controllers/trx/trx.controller';
 import { ClientsModule, Transport } from '@nestjs/microservices';
+import { CacheInterceptor, CacheModule } from '@nestjs/cache-manager';
+import { APP_INTERCEPTOR } from '@nestjs/core';
 
 @Module({
   imports: [
     UseCasesProxyModule.register(),
+    CacheModule.register(),
     ClientsModule.register([
       {
         name: 'USER_SERVICE',
@@ -32,5 +35,11 @@ import { ClientsModule, Transport } from '@nestjs/microservices';
     ]),
   ],
   controllers: [TrxController],
+  providers: [
+    {
+      provide: APP_INTERCEPTOR,
+      useClass: CacheInterceptor,
+    },
+  ],
 })
 export class HttpModule {}

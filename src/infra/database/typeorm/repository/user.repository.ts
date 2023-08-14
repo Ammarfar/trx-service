@@ -27,4 +27,12 @@ export class TypeOrmUserRepository implements UserRepository {
   async updateById(id: number, user: UserM): Promise<void> {
     await this.userEntityRepository.update({ id: id }, user);
   }
+
+  async findById(id: number): Promise<UserM> {
+    const userEntity = await this.userEntityRepository.findOneByOrFail({
+      id: id,
+    });
+
+    return UserMapper.toDomain(userEntity);
+  }
 }

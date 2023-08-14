@@ -21,6 +21,7 @@ import { AddTrxUseCase } from 'src/usecases/trx/addTrx.usecase';
 import { TrxPresenter } from './trx.presenter';
 import { AddTrxDto } from './trx.dto';
 import { ClientProxy } from '@nestjs/microservices';
+import { ExceptionsService } from 'src/infra/exceptions/exceptions.service';
 
 @Controller('trxs')
 @ApiTags('trx')
@@ -40,6 +41,7 @@ export class TrxController {
     private readonly userClient: ClientProxy,
     @Inject('PRODUCT_SERVICE')
     private readonly productClient: ClientProxy,
+    private readonly exceptionService: ExceptionsService,
   ) {
     this.userClient.connect();
     this.productClient.connect();
@@ -72,9 +74,23 @@ export class TrxController {
   @Post('/')
   @ApiResponseType(TrxPresenter, false)
   async addTrx(@Body() addTrxDto: AddTrxDto) {
-    const trxCreated = await this.addTrxUsecaseProxy
-      .getInstance()
-      .execute(addTrxDto);
+    const addUseCase = this.addTrxUsecaseProxy.getInstance();
+
+    const user = await addUseCase.getUser(addTrxDto.userId);
+    if (!user) {
+      this.exceptionService.badRequestException({
+        message: 'User Not Found!.',
+      });
+    }
+
+    const product = await addUseCase.getProduct(addTrxDto.productId);
+    if (!product) {
+      this.exceptionService.badRequestException({
+        message: 'Product Not Found!.',
+      });
+    }
+
+    const trxCreated = await addUseCase.execute(addTrxDto);
 
     this.userClient.emit('trx.created', trxCreated);
     this.productClient.emit('trx.created', trxCreated);

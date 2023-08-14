@@ -54,12 +54,27 @@ export class UseCasesProxyModule {
             new UseCaseProxy(new GetTrxsUseCase(trxRepository)),
         },
         {
-          inject: [LoggerService, TypeOrmTrxRepository],
+          inject: [
+            LoggerService,
+            TypeOrmTrxRepository,
+            TypeOrmUserRepository,
+            TypeOrmProductRepository,
+          ],
           provide: UseCasesProxyModule.POST_TRX_USECASES_PROXY,
           useFactory: (
             logger: LoggerService,
             trxRepository: TypeOrmTrxRepository,
-          ) => new UseCaseProxy(new AddTrxUseCase(logger, trxRepository)),
+            userRepository: TypeOrmUserRepository,
+            productRepository: TypeOrmProductRepository,
+          ) =>
+            new UseCaseProxy(
+              new AddTrxUseCase(
+                logger,
+                trxRepository,
+                userRepository,
+                productRepository,
+              ),
+            ),
         },
         {
           inject: [LoggerService, TypeOrmTrxRepository],

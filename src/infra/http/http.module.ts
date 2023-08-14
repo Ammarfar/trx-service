@@ -5,11 +5,13 @@ import { ClientsModule, Transport } from '@nestjs/microservices';
 import { CacheInterceptor, CacheModule } from '@nestjs/cache-manager';
 import { APP_INTERCEPTOR } from '@nestjs/core';
 import { ConfigModule, ConfigService } from '@nestjs/config';
+import { ExceptionsModule } from '../exceptions/exceptions.module';
 
 @Module({
   imports: [
     UseCasesProxyModule.register(),
     CacheModule.register(),
+    ExceptionsModule,
     ClientsModule.registerAsync([
       {
         name: 'USER_SERVICE',

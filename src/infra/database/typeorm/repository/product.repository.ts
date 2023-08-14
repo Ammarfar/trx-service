@@ -27,4 +27,12 @@ export class TypeOrmProductRepository implements ProductRepository {
   async updateById(id: number, product: ProductM): Promise<void> {
     await this.productEntityRepository.update({ id: id }, product);
   }
+
+  async findById(id: number): Promise<ProductM> {
+    const productEntity = await this.productEntityRepository.findOneByOrFail({
+      id: id,
+    });
+
+    return ProductMapper.toDomain(productEntity);
+  }
 }
